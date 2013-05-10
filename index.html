@@ -3,20 +3,43 @@
 <title>Cave</title>
 <script>
 frame=0
+ship={x:200, y:100, a:0, controls: {left: false, right: false}}
+document.onkeydown=keydown
+document.onkeyup=keyup
 function tick() {
     frame++
-    e=document.getElementById("rect")
-    e.setAttribute("transform", "rotate("+ (frame*4) +",325,100)")
-    if (frame<100)
+    if (ship.controls.left)
+	ship.a -= 4;
+    if (ship.controls.right)
+	ship.a += 4;
+    //ship.a = frame*4
+    e=document.getElementById("ship")
+    e.setAttribute("transform", "translate("+ ship.x +","+ ship.y +") rotate("+ ship.a +")"); 
+    if (frame<1000)
 	setTimeout(tick, 50)
 }
+
+function keydown(e) {
+    switch(e.keyCode) {
+    case 65: ship.controls.left=true; break;
+    case 68: ship.controls.right=true; break;
+    }
+}
+
+function keyup(e) {
+    switch(e.keyCode) {
+    case 65: ship.controls.left=false; break;
+    case 68: ship.controls.right=false; break;
+    }
+}
+
 </script>
 </head>
 <body onLoad="tick()">
 <svg width="600" height="400" viewbox="0 0 600 400" style="border: 1px solid black">
-<line x1="10" y1="10" x2="200" y2="100" stroke="black" stroke-width="2"/>
-<rect id="rect" width="50" height="100" x="300" y="50" fill="none" stroke="red"/>
 <polyline fill="none" stroke="black" points="0,200 50,300 100,280 150,250 200,200 300,100 400,100 500,250 600,400"/>
+<polygon id="ship" points="20,0 -15,-10 -8,-3 -8,4 -15,10"/>
+    <text x="10" y="15">A: turn left, D: turn right</text>
 </svg>
 </body>
 </html>
